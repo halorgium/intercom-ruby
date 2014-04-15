@@ -212,6 +212,12 @@ describe "Intercom::User" do
     user.created_at.must_equal nil
   end
 
+  it "handles empty responses" do
+    Intercom.expects(:post).with("/v1/users", {"email" => "jo@example.com", "created_at" => nil}).returns(nil)
+    user = Intercom::User.create("email" => "jo@example.com", "created_at" => nil)
+    user.created_at.must_equal nil
+  end
+
   it "sets/gets rw keys" do
     params = {"email" => "me@example.com", :user_id => "abc123", "name" => "Bob Smith", "last_seen_ip" => "1.2.3.4", "last_seen_user_agent" => "ie6", "created_at" => Time.now}
     user = Intercom::User.new(params)
